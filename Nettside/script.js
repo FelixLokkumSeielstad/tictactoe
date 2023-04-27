@@ -39,10 +39,49 @@ const navSlide = () => {
   // When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
   window.onscroll = function() {scrollFunction()};
   
-  function scrollFunction() {
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {;
-      document.querySelector("nav").style.backgroundColor = "rgba(10, 10, 10, .9)";
-    } else {
-      document.querySelector("nav").style.backgroundColor = "transparent";
-    }
+function scrollFunction() {
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {;
+    document.querySelector("nav").style.backgroundColor = "rgba(10, 10, 10, .9)";
+  } else {
+    document.querySelector("nav").style.backgroundColor = "transparent";
   }
+}
+
+
+var eefe = true
+
+
+function signin() {
+  const signInEl = document.getElementById("signin")
+  const parentElement = document.querySelector(".lgsignin");
+  if (eefe) {
+    signInEl.innerHTML = "Sign up";
+    eefe = false
+  } else {
+    signInEl.innerHTML = "Log in";
+    const addInput = document.createElement("input");
+    addInput.setAttribute("type", "text");
+    addInput.setAttribute("id", "fname");
+    addInput.setAttribute("name", "fname");
+    const addlable = document.createElement("label");
+    addlable.setAttribute("type", "text");
+    addlable.setAttribute("class", "label");
+    addlable.textContent = "E-post";
+    const lineBreak = document.createElement("br");
+
+    parentElement.appendChild(addlable);
+    parentElement.appendChild(lineBreak);
+    parentElement.appendChild(addInput);
+    eefe = true
+  }
+}
+
+function gender(){
+  var gender = document.getElementById("gender").value
+  if (gender = Annet) {
+
+  }
+
+}
+
+
