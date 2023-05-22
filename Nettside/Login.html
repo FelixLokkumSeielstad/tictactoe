@@ -16,8 +16,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="Aboutme.html">About</a></li>
             <li><a href="Download.html">Download</a></li>
-            <li><a href="Manuel.html">Manuel</a></li>
-            <li><a href="Login.html" id="activenav">Log in</a></li>
+            <li><a href="Login.html">Log in</a></li>
         </ul>
         <div class="burger">
             <div class="line1"></div>
@@ -29,19 +28,19 @@
     <section class="Login">
         <div class="lgcontainer" id="lgcontainer">
             <div class="lgsignin">
-                <p class="label">login</p> <br><br>
+                <p class="LoginHeader">log in</p> <br><br>
                 <label class="label">Brukernavn</label><br>
                 <input type="text" id="fname" name="fname"><br><br>
                 <label class="label">Passord</label><br>
-                <input type="text" id="fname" name="fname"><br><br>
-            </div>
-            <div class="forgot">
-                <select name="" id="gender">
-                    <option value="Gutt">Gutt</option>
-                    <option value="Jente">Jente</option>
-                    <option value="Annet">Annet</option>
-                </select>
-                <button onclick="signin()" id="signin">Sign up</button>
+                <input type="password" id="fname" name="fname"><br>
+            </div><br>
+            <div class="manybutons">
+                <div class="forgot">                
+                    <button onclick="Makeacount()">Forgot password</button>
+                </div>
+                <div class="exstra-info">
+                    <button onclick="signin()" id="signin">Sign up</button>
+                </div><br>
             </div>
         </div>
     </section>

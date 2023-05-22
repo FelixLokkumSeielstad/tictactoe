@@ -64,17 +64,6 @@ nav {
 
 
 
-
-
-@media only screen and (min-width:1920px) {
-  .herobilde{
-    display: none;
-  }
-  .main-banner{
-    display: none;
-  }
-}
-
 @media screen and (max-width: 1024px) {
   .nav-links {
       width: 60%;
@@ -134,6 +123,10 @@ nav {
  
  /*//////////////////////ting/////////////////////////*/
 
+.LoginHeader{
+  background-color: transparent;
+}
+
 
 section{
   scroll-snap-align: start;
@@ -186,6 +179,10 @@ section{
 }
 
 
+#epostlable{
+  background-color: transparent;
+}
+
 /*////////////////////////Download//////////////////////////*/
 
 
@@ -229,14 +226,6 @@ section{
   background-color: transparent;
 }
 
-.forgot{
-  background-color: transparent;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-}
-
 
 #lgbutton{
   width: fit-content;
@@ -248,4 +237,31 @@ section{
 .lgsignin{
   background-color: transparent;
 }
+
+.manybutons{
+  width: 80%;
+  height: 25%;
+  background-color: transparent;
+  flex-direction: column;
+}
+
+.exstra-info{
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.forgot{
+  background-color: transparent;
+  width: 80%;
+  display: flex;
+  position: relative;
+  left: 95px;
+}
+
+
+
 /*////////////////////////Home//////////////////////////*/
+
+manybutons

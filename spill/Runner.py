@@ -5,12 +5,12 @@ from random import randint, choice
 class Spiller(pygame.sprite.Sprite): #sprite er en classe som inneholder overflate og rektangel 
 	def __init__(self):
 		super().__init__()
-		spiller_walk_1 = pygame.image.load('grafikk/Spiller/spiller_walk_1.png').convert_alpha()
-		spiller_walk_2 = pygame.image.load('grafikk/Spiller/spiller_walk_2.png').convert_alpha() #her henter jeg bildene til person 
+		spiller_walk_1 = pygame.image.load('spill/grafikk/Spiller/spiller_walk_1.png').convert_alpha()
+		spiller_walk_2 = pygame.image.load('spill/grafikk/Spiller/spiller_walk_2.png').convert_alpha() #her henter jeg bildene til person 
 		self.spiller_walk = [spiller_walk_1,spiller_walk_2]
 		self.spiller_index = 0
-		self.spiller_jump = pygame.image.load('grafikk/spiller/spiller_hop.png').convert_alpha()
-		self.spiller_krab = pygame.image.load('grafikk/spiller/spiller_krab.png').convert_alpha()
+		self.spiller_jump = pygame.image.load('spill/grafikk/spiller/spiller_hop.png').convert_alpha()
+		self.spiller_krab = pygame.image.load('spill/grafikk/spiller/spiller_krab.png').convert_alpha()
 
 		self.image = self.spiller_walk[self.spiller_index]
 		self.rect = self.image.get_rect(midbottom = (80,300))
@@ -51,18 +51,18 @@ class Hindring(pygame.sprite.Sprite):
 		super().__init__()
 		
 		if type == 'bat':
-			bat1 = pygame.image.load('grafikk/flagermus/flagermus1.png').convert_alpha()		
-			bat2 = pygame.image.load('grafikk/flagermus/flagermus2.png').convert_alpha()
+			bat1 = pygame.image.load('spill/grafikk/flagermus/flagermus1.png').convert_alpha()		
+			bat2 = pygame.image.load('spill/grafikk/flagermus/flagermus2.png').convert_alpha()
 			self.frames = [bat1,bat2]
 			y_pos = 210
 		elif type == 'zombi':
-			zombi_1 = pygame.image.load('grafikk/Zombi/zombi_1.png').convert_alpha()
-			zombi_2 = pygame.image.load('grafikk/Zombi/zombi_2.png').convert_alpha()
+			zombi_1 = pygame.image.load('spill/grafikk/Zombi/zombi_1.png').convert_alpha()
+			zombi_2 = pygame.image.load('spill/grafikk/Zombi/zombi_2.png').convert_alpha()
 			self.frames = [zombi_1,zombi_2]
 			y_pos  = 300
 		else:
-			zombi_1 = pygame.image.load('grafikk/flagermus/spokelse.png').convert_alpha()
-			zombi_2 = pygame.image.load('grafikk/flagermus/spokelse.png').convert_alpha()
+			zombi_1 = pygame.image.load('spill/grafikk/flagermus/spokelse.png').convert_alpha()
+			zombi_2 = pygame.image.load('spill/grafikk/flagermus/spokelse.png').convert_alpha()
 			self.frames = [zombi_1,zombi_2]
 			y_pos  = 216
 
@@ -102,7 +102,6 @@ pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
-test_font = pygame.font.Font('Pixeltype.ttf', 50)
 game_active = False
 start_time = 0
 current_time = 0
@@ -113,19 +112,19 @@ spiller.add(Spiller())
 
 obstacle_group = pygame.sprite.Group()
 
-ground_surface = pygame.image.load('grafikk/bakgrunn/bakke.png').convert()
+ground_surface = pygame.image.load('spill/grafikk/bakgrunn/bakke.png').convert()
 
 # Himmel
-himmel1 = pygame.image.load("grafikk/bakgrunn/himmel.png").convert_alpha()	#importerer himmel
+himmel1 = pygame.image.load("spill/grafikk/bakgrunn/himmel.png").convert_alpha()	#importerer himmel
 himmel1_rect = himmel1.get_rect(topleft = (800,0))
-himmel2 = pygame.image.load("grafikk/bakgrunn/himmel.png").convert_alpha()
+himmel2 = pygame.image.load("spill/grafikk/bakgrunn/himmel.png").convert_alpha()
 himmel2_rect = himmel2.get_rect(topleft = (0,0))
-himmel3 = pygame.image.load("grafikk/bakgrunn/himmel.png").convert_alpha()
+himmel3 = pygame.image.load("spill/grafikk/bakgrunn/himmel.png").convert_alpha()
 himmel3_rect = himmel3.get_rect(topleft = (-800,0))
 
-#sky1 = pygame.image.load("grafikk/bakgrunn/sky1.png").convert_alpha()
-#sky2 = pygame.image.load("grafikk/bakgrunn/sky2.png").convert_alpha()
-#sky3 = pygame.image.load("grafikk/bakgrunn/sky3.png").convert_alpha()
+#sky1 = pygame.image.load("spill/grafikk/bakgrunn/sky1.png").convert_alpha()
+#sky2 = pygame.image.load("spill/grafikk/bakgrunn/sky2.png").convert_alpha()
+#sky3 = pygame.image.load("spill/grafikk/bakgrunn/sky3.png").convert_alpha()
 #sky1_x_pos = 600
 #sky2_x_pos = 600
 #sky3_x_pos = 600
@@ -133,7 +132,7 @@ himmel3_rect = himmel3.get_rect(topleft = (-800,0))
 obstacle_rect_list = []
 
 # Intro screen
-spiller_stand = pygame.image.load('grafikk/Spiller/spiller_stand.png').convert_alpha()
+spiller_stand = pygame.image.load('spill/grafikk/Spiller/spiller_stand.png').convert_alpha()
 spiller_stand = pygame.transform.rotozoom(spiller_stand,0,2)
 spiller_stand_rect = spiller_stand.get_rect(center = (400,200))
 
@@ -144,7 +143,7 @@ pygame.time.set_timer(obstacle_timer,1200)	#her er timeren til når hindringer b
 #sky_timer = pygame.USEREVENT + 1
 #pygame.time.set_timer(sky_timer,1200)
 
-game_name = test_font.render('Runner',False,(111,196,169))	#text på skjemmen når spille ikke er aktivt
+	#text på skjemmen når spille ikke er aktivt
 game_name_rect = game_name.get_rect(center = (400,80))
 game_score_imput = test_font.render('lagre score trykk h',False,(111,196,169))
 game_score_rect = game_score_imput.get_rect(center = (600,80))
@@ -220,7 +219,7 @@ while True:
 			screen.blit(score_message,score_message_rect)
 			screen.blit(game_score_imput,game_score_rect) #	her kan jeg skrive navn
 			keys = pygame.key.get_pressed() 
-		#help = pygame.image.load("grafikk/help.png")
+		#help = pygame.image.load("spill/grafikk/help.png")
 		#help_pos = help.get_rect(topleft = (0,0))
 		#keys = pygame.key.get_pressed() 
 		#if keys[pygame.K_h]:
