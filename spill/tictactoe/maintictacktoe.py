@@ -3,15 +3,33 @@ import os
 import sys
 import hashlib
 
-def draw_brett(spots):
-  brett = (f"|{spots[1]}|{spots[2]}|{spots[3]}|\n"
-             f"|{spots[4]}|{spots[5]}|{spots[6]}|\n"
-             f"|{spots[7]}|{spots[8]}|{spots[9]}|")
-  print(brett)
- 
+#def draw_brett(spots, størelse):
+#    for i in range(1, størelse * størelse + 1):
+#        print(f"|{spots[i]}", end="")
+#        if i % størelse == 0:
+#           print("|")
+
+#def draw_board(spots):
+#  board = (f"|{spots[1]}|{spots[2]}|{spots[3]}|\n"
+#             f"|{spots[4]}|{spots[5]}|{spots[6]}|\n"
+#             f"|{spots[7]}|{spots[8]}|{spots[9]}|")
+#  print(board)
+
+#her tegner jeg prettet med en 
+def draw_brett(spots, størelse):
+
+    board_størelse = størelse * størelse
+    brett = ""
+
+    for i in range(1, board_størelse + 1):
+        brett += "|" + str(spots[i])
+
+        if i % størelse == 0:
+            brett += "|\n"
+    print(brett)
 
 def hvem_tur(turn):
-  if turn % 2 == 0:
+  if turn % 2 == 0:#Skall være ærlig vet ikke hvordan men gir meg et partall eller odetall
     return 'X'
   else:
     return 'O'
@@ -19,7 +37,7 @@ def hvem_tur(turn):
 #sjekker alle mulige måter å vinne
 def sjekkwin(spots):
 
-    win_conditions = {
+    winmotr = {
         (1, 2, 3): True,  
         (4, 5, 6): True,
         (7, 8, 9): True,
@@ -30,10 +48,18 @@ def sjekkwin(spots):
         (3, 5, 7): True
     }
 
-    for condition, result in win_conditions.items():
-        if all(spots[position] == spots[condition[0]] for position in condition):
-            return result
+    for winmotr, result in winmotr.items():#ser etter om noen av winmotr er true
+        all_match = True
 
+        #sjekker hvor posissjonen til brukerens spots er
+        for position in winmotr:
+            if spots[position] != spots[winmotr[0]]: #sjekker om spots er på riktig sted.
+                all_match = False
+                break
+
+        if all_match:
+            return result
+    #gjør at coden fortsetter til det er en vinner
     return False
 
 connect = mysql.connector.connect(
@@ -45,8 +71,19 @@ connect = mysql.connector.connect(
 
 
 def play_game():
-    spots = {1: '1', 2: '2', 3: '3', 4: '4', 5: '5',
-             6: '6', 7: '7', 8: '8', 9: '9'}
+    #allt her runner bare en gang
+    print("velg en størelse på brettet mellom 1 og 5")
+    board_størelse = int(input())
+    
+    for k in range(board_størelse):
+            if board_størelse in [3, 4, 5]:
+                spots = {}
+                for i in range(1, board_størelse * board_størelse + 1):
+                    spots[i] = str(i)
+            else:
+                print("kan ikke lage dette prøv igjen")
+                print("velg en størelse på brettet mellom 1 og 5")
+                board_størelse = int(input())
 
     spiller, complete = True, False
     turn = 1
@@ -54,20 +91,22 @@ def play_game():
     vinner = []
 
     while spiller:
+        #her runner spillet flere ganger
         os.system('cls' if os.name == 'nt' else 'clear')
-        draw_brett(spots)
+        draw_brett(spots, board_størelse)
         if prev_turn == turn:
             print("Ugjyldig plass. velg en annen")
         prev_turn = turn
-        print("Spiller " + str((turn % 2) + 1) + "'s tur: Trykk s for å stoppe å spille")
+        print("Spiller " + str((turn % 2) + 1) + "'s tur: Trykk s for å stoppe å spille")#samme her trenger coden får å bytte tur
 
         choice = input()
         if choice == 's':
             spiller = False
-        elif str.isdigit(choice) and int(choice) in spots:
-            if not spots[int(choice)] in {"X", "O"}:
+
+        elif str.isdigit(choice) and int(choice) in spots: #sjekker om choice er en string med bruk av isdigit
+            if not spots[int(choice)] in {"X", "O"}: #sjekker om av spotsa er fylt med X eller O
                 turn += 1
-                spots[int(choice)] = hvem_tur(turn)
+                spots[int(choice)] = hvem_tur(turn)# skriver in x eller o på spillerens valg eller spots[int(choice)]
 
         if sjekkwin(spots):
             spiller, complete = False, True
@@ -75,7 +114,7 @@ def play_game():
             spiller = False
 
     os.system('cls' if os.name == 'nt' else 'clear')
-    draw_brett(spots)
+    draw_brett(spots, board_størelse)
     if complete:
         if hvem_tur(turn) == 'X':
             print("Spiller 1 vant")
@@ -145,8 +184,8 @@ while spill_igjen:
                         hentscore = "SELECT score FROM gamepoints WHERE name = %s"
                         cursor.execute(hentscore, (spiller_name,))
                         getscore = cursor.fetchone()
-                        current_score = getscore[0]
-                        new_score = current_score + 1
+                        scorena = getscore[0]
+                        new_score = scorena + 1
 
                         oppdater_score = "UPDATE gamepoints SET score = %s WHERE name = %s"
                         cursor.execute(oppdater_score, (new_score, spiller_name))
@@ -164,6 +203,3 @@ while spill_igjen:
                 oppretbruker(navnerdb)
         else:
             spilligjen()
-
-
-
