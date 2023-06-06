@@ -27,6 +27,17 @@ def draw_brett(spots, størelse):
         if i % størelse == 0:
             brett += "|\n"
     print(brett)
+    
+#felix = []
+
+#for i in range(row):
+#    row_values = []
+#    for j in range(col):
+#        row_values.append(0)
+#    felix.append(row_values)
+#
+#for row_values in felix:
+#    print(row_values)
 
 def hvem_tur(turn):
   if turn % 2 == 0:#Skall være ærlig vet ikke hvordan men gir meg et partall eller odetall
