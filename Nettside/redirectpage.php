@@ -1,48 +1,51 @@
 <?php
 require 'connect.php';
 
+//Denne if statmenten sjekker om bruker er info er puttet in.
 if (isset($_POST['makeusername']) && isset($_POST['makepassword']) && isset($_POST['makeepost'])) {
+    //lager variabler får å putte informaskjonen in i databasen
     $usernameInput = $_POST['makeusername'];
     $passwordInput = password_hash($_POST['makepassword'], PASSWORD_DEFAULT);
     $epostInput = $_POST['makeepost'];
 
-    // Create the SQL insert statement using prepared statement
-    $stmt1 = $connect->prepare("INSERT INTO login (name, password, epost) VALUES (?, ?, ?)");
-    $stmt1->bind_param("sss", $usernameInput, $passwordInput, $epostInput);
+    // Setter verdiene inn i databasen og endrer dem senere for å hindre SQL-injeksjoner.
+    $lagbruker = $connect->prepare("INSERT INTO login (name, password, epost) VALUES (?, ?, ?)");
+    $lagbruker->bind_param("sss", $usernameInput, $passwordInput, $epostInput);
 
-    // Execute the insert statement
-    if ($stmt1->execute()) {
+    // her utfører jeg coden over
+    if ($lagbruker->execute()) {
         echo "Data inserted successfully.";
     } else {
-        echo "Error: " . $stmt1->error;
+        echo "Error: " . $lagbruker->error;
     }
 }
 
+// i denne if statmenten bruker jeg 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $usernameOutput = $_POST['username'];
     $passwordOutput = $_POST['password'];
 
-    // Create the SQL select statement using prepared statement
-    $stmt2 = $connect->prepare("SELECT * FROM login WHERE name = ?");
-    $stmt2->bind_param("s", $usernameOutput);
+    // Oppretter SQL-spørringen ved hjelp av prepared statement.
+    $loggerinbruker = $connect->prepare("SELECT * FROM login WHERE name = ?");
+    $loggerinbruker->bind_param("s", $usernameOutput);
 
-    $stmt2->execute();
-    $result = $stmt2->get_result();
+    //her utfører jeg koden over 
+    $loggerinbruker->execute();
+    $result = $loggerinbruker->get_result();
 
+    //her henter jeg passordet fra databsen og sjekker om det et i databasen
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $hashedPassword = $row['password'];
 
+        // hvis bruker er riktig eller feil
         if (password_verify($passwordOutput, $hashedPassword)) {
-            // Username and password combination is correct
-            echo "Login successful.";
+            echo "Du har logget in";
         } else {
-            // Invalid password
-            echo "Invalid username or password.";
+            echo "ugyldig Brukernavn Eller passord";
         }
     } else {
-        // Username not found
-        echo "Invalid username or password.";
+        echo "ugyldig Brukernavn Eller passord";
     }
 }
 
@@ -53,26 +56,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reviewinput'])) {
     $selectedOption = $_POST['selectOption'];
     $reviewinput = $_POST['reviewinput'];
 
-    $stmt3 = $connect->prepare("INSERT INTO webrating (review, rating) VALUES (?, ?)");
-    $stmt3->bind_param("ss", $reviewinput, $selectedOption);
+    // Oppretter SQL-spørringen ved hjelp av prepared statement.
+    $lagreview = $connect->prepare("INSERT INTO webrating (review, rating) VALUES (?, ?)");
+    $lagreview->bind_param("ss", $reviewinput, $selectedOption);
 
-    // Execute the insert statement
-    if ($stmt3->execute()) {
-        echo "Data inserted successfully.";
-    } else {
-        echo "Error: " . $stmt3->error;
-    }
+    //kjører lagreview variabelen
+    $lagreview->execute();
 }
 
 
 
-// Close the prepared statements
-$stmt1->close();
-$stmt2->close();
-$stmt3->close();
-$stmt4->close();
-
-// Close the database connection
+// stenger alle tilkoblingene
+$lagbruker->close();
+$loggerinbruker->close();
+$lagreview->close();
 $connect->close();
 
 ini_set('display_errors', 1);
