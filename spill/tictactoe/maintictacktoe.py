@@ -3,41 +3,38 @@ import os
 import sys
 import hashlib
 
-#def draw_brett(spots, størelse):
+#connecter til databasen
+connect = mysql.connector.connect(
+    host='localhost',
+    user='FelixAdmin',
+    password='FelixAdmin',
+    database='mywbsdb'
+) 
+
+#def tegn_brett(spots, størelse):
 #    for i in range(1, størelse * størelse + 1):
 #        print(f"|{spots[i]}", end="")
 #        if i % størelse == 0:
 #           print("|")
 
-#def draw_board(spots):
+#def tegn_board(spots):
 #  board = (f"|{spots[1]}|{spots[2]}|{spots[3]}|\n"
 #             f"|{spots[4]}|{spots[5]}|{spots[6]}|\n"
 #             f"|{spots[7]}|{spots[8]}|{spots[9]}|")
-#  print(board)
+#  print(board)størelse
 
-#her tegner jeg prettet med en 
-def draw_brett(spots, størelse):
+#her tegner jeg brettet med en 
+def tegn_brett(spots, størelse):
 
     board_størelse = størelse * størelse
     brett = ""
 
-    for i in range(1, board_størelse + 1):
-        brett += "|" + str(spots[i])
+    for i in range(1, board_størelse + 1):#iterates board_størelse antall ganger
+        brett += "|" + str(spots[i])# Legger til verdien av spots[i] i brettet med "|" i mellom
 
-        if i % størelse == 0:
-            brett += "|\n"
+        if i % størelse == 0: #Sjekker om i er et multiplum av størelse. Hvis det er tilfellet, betyr det at vi har nådd slutten av en rad.
+            brett += "|\n" # Legger til "|" for å avslutte raden og "\n" for å gå til neste linje
     print(brett)
-    
-#felix = []
-
-#for i in range(row):
-#    row_values = []
-#    for j in range(col):
-#        row_values.append(0)
-#    felix.append(row_values)
-#
-#for row_values in felix:
-#    print(row_values)
 
 def hvem_tur(turn):
   if turn % 2 == 0:#Skall være ærlig vet ikke hvordan men gir meg et partall eller odetall
@@ -48,53 +45,69 @@ def hvem_tur(turn):
 #sjekker alle mulige måter å vinne
 def sjekkwin(spots):
 
-    winmotr = {
-        (1, 2, 3): True,  
-        (4, 5, 6): True,
-        (7, 8, 9): True,
-        (1, 4, 7): True, 
-        (2, 5, 8): True,
-        (3, 6, 9): True,
-        (1, 5, 9): True,  
-        (3, 5, 7): True
-    }
+    winmotr = {}
 
-    for winmotr, result in winmotr.items():#ser etter om noen av winmotr er true
+    antall_spots = len(spots) #finner antall spots
+    spotsi2 = antall_spots ** 0.5 #finner kvadratrotten av antall_spots
+    board_size = int(spotsi2) #gjør square_root til int
+
+    if board_size == 3: # lagger vinner kombiasjoner for kart 4
+        winmotr[(1, 2, 3)] = True
+        winmotr[(4, 5, 6)] = True
+        winmotr[(7, 8, 9)] = True
+    elif board_size == 4:# lagger vinner kombiasjoner for kart 4
+        winmotr[(1, 2, 3, 4)] = True
+        winmotr[(5, 6, 7, 8)] = True
+        winmotr[(9, 10, 11, 12)] = True
+        winmotr[(13, 14, 15, 16)] = True
+        winmotr[(1, 5, 9, 13)] = True
+        winmotr[(2, 6, 10, 14)] = True
+        winmotr[(3, 7, 11, 15)] = True
+        winmotr[(4, 8, 12, 16)] = True
+        winmotr[(1, 6, 11, 16)] = True
+        winmotr[(4, 7, 10, 13)] = True
+    else:# lagger vinner kombiasjoner for kart 5
+        winmotr[(1, 2, 3, 4, 5)] = True
+        winmotr[(6, 7, 8, 9, 10)] = True
+        winmotr[(11, 12, 13, 14, 15)] = True
+        winmotr[(16, 17, 18, 19, 20)] = True
+        winmotr[(21, 22, 23, 24, 25)] = True
+        winmotr[(1, 6, 11, 16, 21)] = True
+        winmotr[(2, 7, 12, 17, 22)] = True
+        winmotr[(3, 8, 13, 18, 23)] = True
+        winmotr[(4, 9, 14, 19, 24)] = True
+        winmotr[(5, 10, 15, 20, 25)] = True
+        winmotr[(1, 7, 13, 19, 25)] = True
+        winmotr[(5, 9, 13, 17, 21)] = True
+
+# Gå gjennom hvert vindu og resultat i winmotr
+    for winmotr, result in winmotr.items():
         all_match = True
-
-        #sjekker hvor posissjonen til brukerens spots er
+        #gå gjennom hver posisjon i vinduet
         for position in winmotr:
-            if spots[position] != spots[winmotr[0]]: #sjekker om spots er på riktig sted.
+            if spots[position] != spots[winmotr[0]]:#sjekk om verdien i posisjonen ikke matcher verdien i den første posisjonen i vinduet
                 all_match = False
                 break
-
+        #Hvis alle posisjonene i vinduet matcher, returner resultatet
         if all_match:
             return result
-    #gjør at coden fortsetter til det er en vinner
+
     return False
 
-connect = mysql.connector.connect(
-    host='localhost',
-    user='FelixAdmin',
-    password='FelixAdmin',
-    database='mywbsdb'
-) 
 
-
-def play_game():
+def spillet():
     #allt her runner bare en gang
-    print("velg en størelse på brettet mellom 1 og 5")
+    print("velg en størelse på brettet mellom 3 og 5")
     board_størelse = int(input())
     
-    for k in range(board_størelse):
-            if board_størelse in [3, 4, 5]:
-                spots = {}
-                for i in range(1, board_størelse * board_størelse + 1):
-                    spots[i] = str(i)
-            else:
-                print("kan ikke lage dette prøv igjen")
-                print("velg en størelse på brettet mellom 1 og 5")
-                board_størelse = int(input())
+    #Ser om user input er 3,4 eller 5
+    if board_størelse in [3, 4, 5]:
+        spots = {}
+        for i in range(1, board_størelse ** 2 + 1):
+            spots[i] = str(i)
+    else:
+        print("kan ikke lage dette prøv igjen")
+        spillet()
 
     spiller, complete = True, False
     turn = 1
@@ -103,8 +116,8 @@ def play_game():
 
     while spiller:
         #her runner spillet flere ganger
-        os.system('cls' if os.name == 'nt' else 'clear')
-        draw_brett(spots, board_størelse)
+        os.system('cls' if os.name == 'nt' else 'clear')#denne coden renser skjermen
+        tegn_brett(spots, board_størelse)
         if prev_turn == turn:
             print("Ugjyldig plass. velg en annen")
         prev_turn = turn
@@ -119,22 +132,26 @@ def play_game():
                 turn += 1
                 spots[int(choice)] = hvem_tur(turn)# skriver in x eller o på spillerens valg eller spots[int(choice)]
 
+        #denne koden regner ut hvor lenge spille kan vare basert på størelsen på kartet
         if sjekkwin(spots):
             spiller, complete = False, True
-        if turn > 8:
+        if turn > board_størelse * board_størelse:
             spiller = False
 
     os.system('cls' if os.name == 'nt' else 'clear')
-    draw_brett(spots, board_størelse)
+    tegn_brett(spots, board_størelse)
     if complete:
         if hvem_tur(turn) == 'X':
             print("Spiller 1 vant")
+            erklærtvinner()
         else:
             print("Spiller 2 vant")
+            erklærtvinner()
     else:
         print("ingen vinner")
+        spilligjen()
 
-
+#er en funksjon som runner i spilligjen() får å opprette en bruker  
 def oppretbruker(spiller_name):
     print("Du må lage et bruker navn")
     name =  input()
@@ -142,6 +159,7 @@ def oppretbruker(spiller_name):
     passwd =  input()
     hashed_passwd = hashlib.sha256(passwd.encode()).hexdigest()
     score = 1
+    #lagger en insertkomando med tomme values jeg kan sette senere før jeg executer får å hindre sql injektions 
     lagbruker = "INSERT INTO gamepoints (name, score, passwd) VALUES (%s, %s, %s)"
     cursor = connect.cursor()
     cursor.execute(lagbruker, (name, score, hashed_passwd))
@@ -149,7 +167,8 @@ def oppretbruker(spiller_name):
     cursor.close()
     spilligjen()
 
-    
+
+#denne funksjonen kan starte 
 def spilligjen():
     print("Takk for at du spilte!")
     print("Vil du spille igjen? (yes/no)")
@@ -158,14 +177,9 @@ def spilligjen():
         spill_igjen = False
     elif spill_igjen_input.lower() == 'no':
         sys.exit()
-
         
-spill_igjen = True
-
-while spill_igjen:
-        play_game()
+def erklærtvinner():
         print("Skriv navn på spiller som vant")
-        print("hvis uavgjort ikke skriv noe")
         
         spiller_name = input()
         if spiller_name.lower() != "":
@@ -213,4 +227,12 @@ while spill_igjen:
                 print("Du har ikke bruker. lage en. nå")
                 oppretbruker(navnerdb)
         else:
-            spilligjen()
+            print("du må skrive et navn")
+            erklærtvinner()
+
+
+    
+spill_igjen = True
+
+while spill_igjen:
+        spillet()
