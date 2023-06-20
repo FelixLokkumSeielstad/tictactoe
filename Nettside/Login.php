@@ -11,10 +11,9 @@
 
 <body>
 
+    <!--Her er manyen-->
     <nav class="nav">
-        <div class="logo">
-            <h4>The Nav</h4>
-        </div>
+        <!-- Liste over navigasjonslenker -->
         <ul class="nav-links">
             <li><a href="index.php" id="activenav">Home</a></li>
             <li><a href="About.php">About</a></li>
@@ -22,6 +21,7 @@
             <li><a href="faq.php">FAQ</a></li>
             <li><a href="Login.php">Log in</a></li>
         </ul>
+        <!-- "Burger"-ikon for mobilvisning -->
         <div class="burger">
             <div class="line1"></div>
             <div class="line2"></div>
@@ -29,13 +29,11 @@
         </div>
     </nav>
 
+    <!--Her starter loginsiden-->
     <section class="Login">
 
-
-
-
         <div class="loginstyle">
-
+            <!--Her er formen som snakker med redirectpage-->
             <form action="redirectpage.php" method="post">
                 <label for="username">Username:</label><br>
                 <input id="username" type="text" name="username" required>
@@ -44,12 +42,11 @@
                 <input id="password" type="password" name="password" required>
                 <br>
                 <div id="epostplacemen"></div>
-                <input type="submit" value="Login">
+                <input id="loginbutton" type="submit" value="Login">
             </form><br>
+            <!--her er knappen som sender informaskjonen til redirectpage-->
             <button onclick="changeloginsite()">Oppret bruker</button>
         </div>
-
-        
 
     </section>
 
